@@ -1,0 +1,18 @@
+cmake_minimum_required(VERSION 3.17)
+
+if(WIN32)
+    set(CMAKE_TOOLCHAIN_FILE "D:/vcpkg/scripts/buildsystems/vcpkg.cmake" CACHE INTERNAL "" FORCE)
+endif()
+
+project(AOC2025)
+
+set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+function(addExe name)
+    set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/${name})
+    file(GLOB_RECURSE src LIST_DIRECTORIES false CONFIGURE_DEPENDS ${SRC_DIR}/*.h ${SRC_DIR}/*.cpp)
+    add_executable(${name} ${src})
+endfunction()
+
+addExe(day1)
