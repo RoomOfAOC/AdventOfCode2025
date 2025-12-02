@@ -16,3 +16,4 @@ function(addExe name)
 endfunction()
 
 addExe(day1)
+addExe(day2)
