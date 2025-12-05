@@ -71,7 +71,10 @@ public:
 
     Mat(size_type const r, size_type const c, value_type const x): rows(r), cols(c) { data.resize(r * c, x); }
 
-    auto&& operator[](this auto&& self, size_type const i, size_type const j) noexcept { return self.data[i * self.cols + j]; }
+    auto&& operator[](this auto&& self, size_type const i, size_type const j) noexcept
+    {
+        return self.data[i * self.cols + j];
+    }
 
     auto&& operator[](this auto&& self, Point const& p) noexcept { return self.operator[](p.x, p.y); }
 
