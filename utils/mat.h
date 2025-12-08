@@ -78,6 +78,37 @@ public:
 
     auto&& operator[](this auto&& self, Point const& p) noexcept { return self.operator[](p.x, p.y); }
 
+    std::vector<value_type> row(size_type const i) const noexcept
+    {
+        return std::vector<value_type>(data.begin() + i * cols, data.begin() + (i + 1) * cols);
+    }
+
+    std::vector<value_type> col(size_type const j) const noexcept
+    {
+        std::vector<value_type> ret(rows);
+        for (auto i = 0; i < rows; i++)
+            ret[i] = data[i * cols + j];
+        return ret;
+    }
+
+    Mat sub_mat(size_type const i, size_type const j, size_type const r, size_type const c) const noexcept
+    {
+        Mat ret(r, c);
+        for (auto k = 0; k < r; k++)
+            for (auto l = 0; l < c; l++)
+                ret[k, l] = (*this)[i + k, j + l];
+        return ret;
+    }
+
+    Mat transpose() const noexcept
+    {
+        Mat ret(cols, rows);
+        for (auto i = 0; i < rows; i++)
+            for (auto j = 0; j < cols; j++)
+                ret[j, i] = (*this)[i, j];
+        return ret;
+    }
+
     bool is_local_minimum(int const i, int const j) const
     {
         std::vector<Point> neighbors;
@@ -131,8 +162,8 @@ public:
     void find_4_neighbors(Point p, std::vector<Point>& neighbors) const { find_4_neighbors(p.x, p.y, neighbors); }
 
 public:
-    size_type rows, cols;
-    std::vector<T> data;
+    size_type rows{}, cols{};
+    std::vector<T> data{};
 };
 
 template <typename T> struct std::formatter<Mat<T>>

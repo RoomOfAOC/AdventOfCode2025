@@ -5,43 +5,24 @@
 #include <string_view>
 #include <vector>
 #include <charconv>
+#include <ranges>
 
-std::vector<std::string> split(const std::string& s, char delimiter)
+auto ltrim(std::string_view sv, std::string_view trim_sv = " ")
 {
-    std::vector<std::string> tokens;
-    std::string token;
-    std::istringstream ss(s);
-    while (std::getline(ss, token, delimiter))
-        tokens.push_back(token);
-    return tokens;
+    auto it = std::ranges::find_if_not(sv, [trim_sv](unsigned char c) { return trim_sv.contains(c); });
+    return sv.substr(std::distance(sv.begin(), it));
 }
 
-std::vector<std::string> split(std::string s, std::string delimeter = " ")
+auto rtrim(std::string_view sv, std::string_view trim_sv = " ")
 {
-    std::vector<std::string> tokens{};
-    size_t pos = 0;
-    while ((pos = s.find(delimeter)) != std::string::npos)
-    {
-        auto token = s.substr(0, pos);
-        if (!token.empty()) tokens.push_back(token);
-        s.erase(0, pos + delimeter.size());
-    }
-    if (!s.empty()) tokens.push_back(s);
-    return tokens;
+    auto rit =
+        std::ranges::find_if_not(sv | std::views::reverse, [trim_sv](unsigned char c) { return trim_sv.contains(c); });
+    return sv.substr(0, sv.size() - std::distance(sv.rbegin(), rit));
 }
 
-std::vector<std::string_view> split(std::string_view sv, std::string_view delimeter = " ")
+auto strip(std::string_view sv, std::string_view trim_sv = " ")
 {
-    std::vector<std::string_view> tokens{};
-    size_t pos = 0;
-    while ((pos = sv.find(delimeter)) != std::string_view::npos)
-    {
-        auto token = sv.substr(0, pos);
-        if (!token.empty()) tokens.push_back(token);
-        sv = sv.substr(pos + delimeter.size());
-    }
-    if (!sv.empty()) tokens.push_back(sv);
-    return tokens;
+    return rtrim(ltrim(sv, trim_sv), trim_sv);
 }
 
 template <typename T> T parse_num(std::string_view token)
