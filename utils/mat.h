@@ -5,6 +5,7 @@
 #include <vector>
 #include <format>
 #include <compare>
+#include <optional>
 
 struct Point
 {
@@ -107,6 +108,14 @@ public:
             for (auto j = 0; j < cols; j++)
                 ret[j, i] = (*this)[i, j];
         return ret;
+    }
+
+    std::optional<Point> find(T const& val) const noexcept
+    {
+        for (auto i = 0; i < rows; i++)
+            for (auto j = 0; j < cols; j++)
+                if ((*this)[i, j] == val) return Point{i, j};
+        return {};
     }
 
     bool is_local_minimum(int const i, int const j) const
