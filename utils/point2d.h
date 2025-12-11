@@ -36,13 +36,7 @@ template <typename T> struct Point2D
         return *this;
     }
 
-    struct Hasher
-    {
-        size_t operator()(Point2D const& point) const
-        {
-            return container_hash<std::initializer_list<T>>()({point.x, point.y});
-        }
-    };
+    size_t hash() const noexcept { return ::hash(x, y); }
 };
 
 template <typename T> struct std::formatter<Point2D<T>>
@@ -77,7 +71,9 @@ template <typename T> T operator*(Point2D<T> const& p1, Point2D<T> const& p2)
 
 template <typename T> bool is_point_on_line(Point2D<T> const& px, Point2D<T> const& p1, Point2D<T> const& p2)
 {
-    return static_cast<T>((p1 - px) ^ (p2 - px)) == T{0};
+    // https://en.cppreference.com/w/cpp/language/operator_precedence.html
+    // == has higher precedence than ^
+    return ((p1 - px) ^ (p2 - px)) == T{0};
 }
 
 template <typename T> bool is_point_on_segment(Point2D<T> const& px, Point2D<T> const& p1, Point2D<T> const& p2)

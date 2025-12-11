@@ -7,6 +7,8 @@
 #include <compare>
 #include <optional>
 
+#include "hash.h"
+
 struct Point
 {
     int x, y;
@@ -33,13 +35,7 @@ struct Point
         return *this;
     }
 
-    struct PointHasher
-    {
-        size_t operator()(Point const& point) const
-        {
-            return std::hash<int>()(point.x) ^ (std::hash<int>()(point.y) << 1);
-        }
-    };
+    std::size_t hash() const noexcept { return ::hash(x, y); }
 };
 
 Point operator+(Point const& p1, Point const& p2)

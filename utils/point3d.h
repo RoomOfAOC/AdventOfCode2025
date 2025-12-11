@@ -34,13 +34,7 @@ template <typename T> struct Point3D
 
     T n2() const noexcept { return x * x + y * y + z * z; }
 
-    struct Hasher
-    {
-        size_t operator()(Point3D const& point) const
-        {
-            return container_hash<std::initializer_list<T>>()({point.x, point.y, point.z});
-        }
-    };
+    std::size_t hash() const noexcept { return ::hash(x, y, z); }
 };
 
 template <typename T> struct std::formatter<Point3D<T>>
