@@ -30,3 +30,4 @@ addExe(day10)
 target_link_libraries(day10 PRIVATE z3::libz3)
 
 addExe(day11)
+addExe(day12)
